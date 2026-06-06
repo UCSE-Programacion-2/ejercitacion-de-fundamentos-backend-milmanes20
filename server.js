@@ -127,6 +127,26 @@ app.get('/frutas/:id', (req, res) => {
  */
 app.post('/frutas', (req, res) => {
   // Tu código aquí
+  try {
+    // 1. Recibir el objeto en el body de la request
+    const nuevaFruta = req.body;
+    // 2. Leer el archivo frutas.json
+    const data = fs.readFileSync(dataFilePath, 'utf-8');
+    const frutas = JSON.parse(data);
+    // 3. Crear un nuevo id (el id máximo actual + 1)
+    const nuevoId = frutas.length > 0 ? Math.max(...frutas.map(fruta => fruta.id)) + 1 : 1;
+    nuevaFruta.id = nuevoId;
+    // 4. Agregar la nueva fruta al arreglo
+    frutas.push(nuevaFruta);
+    // 5. Escribir el nuevo arreglo en el archivo frutas.json
+    fs.writeFileSync(dataFilePath, JSON.stringify(frutas, null, 2), 'utf-8');
+    // 6. Retornar la fruta creada con status 201
+    res.status(201).json(nuevaFruta);
+  } catch (error) {
+    // Manejar errores por si el archivo no se lee o escribe correctamente
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
+  }
+  
 });
 
 // Iniciar el servidor
