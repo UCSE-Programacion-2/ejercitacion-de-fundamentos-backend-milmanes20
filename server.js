@@ -95,6 +95,25 @@ app.get('/frutas/buscar', (req, res) => {
  */
 app.get('/frutas/:id', (req, res) => {
   // Tu código aquí
+  try {
+    // 1. Obtener el id de los parámetros de la url y convertirlo a número
+    const id = parseInt(req.params.id, 10);
+    // 2. Leer el archivo frutas.json
+    const data = fs.readFileSync(dataFilePath, 'utf-8');
+    const frutas = JSON.parse(data);
+    // 3. Buscar la fruta que coincida con el id
+    const frutaEncontrada = frutas.find(fruta => fruta.id === id);
+    // 4. Si la encuentra, retornarla con status 200
+    if (frutaEncontrada) {
+      res.status(200).json(frutaEncontrada);
+    } else {
+      // 5. Si no la encuentra, retornar un objeto de error con status 404
+      res.status(404).json({ error: "Fruta no encontrada" });
+    }
+  } catch (error) {
+    // Manejar errores por si el archivo no se lee correctamente
+    res.status(500).json({ error: 'Error al leer el archivo de datos' });
+  }
 });
 
 /**
