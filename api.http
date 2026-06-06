@@ -11,7 +11,7 @@ GET {{baseUrl}}/frutas/1
 GET {{baseUrl}}/frutas/999
 
 ### Buscar frutas por nombre (Query string)
-GET {{baseUrl}}/frutas/buscar?nombre=manzana
+GET {{baseUrl}}/frutas/buscar?nombre=MA
 
 ### Crear una nueva fruta
 POST {{baseUrl}}/frutas
